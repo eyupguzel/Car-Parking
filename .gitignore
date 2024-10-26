@@ -22,3 +22,5 @@ UserSettings/
 *.pdb
 *.opendb
 *.VC.db 
+
+git rm -r --cached Library/ Logs/ UserSettings/
