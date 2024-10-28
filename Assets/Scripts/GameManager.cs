@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Car;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : GenericSingleton<GameManager>
 {
-    [SerializeField] private List<GameObject> cars = new List<GameObject>();
+    public List<GameObject> cars =  new List<GameObject>();
+
 
     public bool click;
 
@@ -25,18 +27,37 @@ public class GameManager : GenericSingleton<GameManager>
 #endif
     }
 
-    public GameObject GetCar()
+    public List<GameObject> GetCarPool(int carCount)
     {
-        Debug.Log("ZORT");
-        foreach (var car in cars)
+        List<GameObject> carsToUse = new List<GameObject>();
+
+        int index = 0;
+        foreach (GameObject car in cars)
         {
             if (!car.activeInHierarchy)
             {
-                car.SetActive(true);
-                return car;
-            }
-        }
+                carsToUse.Add(car);
+                index++;
 
-        return null;
+                if (index >= carCount) 
+                    break;
+            }
+            
+        }
+        return carsToUse;
+    }
+
+    public void ReturnCar(List<GameObject> cars)
+    {
+        //Debug.Log("ben çalıştım");
+        foreach (GameObject car in cars)
+        {
+            car.SetActive(false);
+        }
+    }
+
+    public void ClickFalse()
+    {
+        click = false;
     }
 }
