@@ -14,17 +14,15 @@ public class GameManager : GenericSingleton<GameManager>
 
     private void Awake()
     {
+       // Application.targetFrameRate = 60;
+
         DontDestroyOnLoad(gameObject);
     }
 
     void Update()
     {
-#if UNITY_EDITOR
         if (Input.GetMouseButtonDown(0))
             click = true;
-#elif UNITY_ANDROID
-        //...
-#endif
     }
 
     public List<GameObject> GetCarPool(int carCount)

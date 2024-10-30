@@ -31,10 +31,6 @@ public class CurrentLevelManager : MonoBehaviour
         PlatformRotation();
         if(carCount <= 0)
             UIManager.Instance.FinishPanel();
-        
-        Debug.Log(UIManager.finished);
-        Debug.Log(carCount);
-
     }
 
     private void PlatformRotation()

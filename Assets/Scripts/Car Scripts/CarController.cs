@@ -16,6 +16,7 @@ namespace Car
 
         private void Awake()
         {
+            
             rb = GetComponent<Rigidbody>();
             parent = GameObject.FindWithTag("Platform");
             currentLevelManager = FindObjectOfType<CurrentLevelManager>();
@@ -29,6 +30,7 @@ namespace Car
             platformTrigger = false;
             parent = GameObject.FindWithTag("Platform");
             currentLevelManager = FindObjectOfType<CurrentLevelManager>();
+            rb.isKinematic = false;
         }
 
         void Update()
@@ -42,7 +44,7 @@ namespace Car
             {
                 transform.SetParent(parentPool.transform);
                 gameObject.SetActive(false);
-                
+
             }
         }
 
@@ -56,9 +58,9 @@ namespace Car
             if (other.gameObject.CompareTag("PlatformTrigger"))
             {
                 platformTrigger = true;
-                
+                rb.isKinematic = true;
                 gameObject.transform.SetParent(parent.transform, true);
-                rb.velocity = Vector3.zero;
+                rb.linearVelocity = Vector3.zero;
                 currentLevelManager.GetCar();
                 currentLevelManager.carCount--;
                 UIManager.Instance.CarCountText(currentLevelManager.carCount);
