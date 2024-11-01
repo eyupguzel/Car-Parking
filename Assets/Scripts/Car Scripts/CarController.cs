@@ -1,70 +1,143 @@
 using System;
+using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Car
 {
     public class CarController : MonoBehaviour
     {
-         private GameObject parent;
+         //private GameObject parent;
         [SerializeField] float carSpeed;
         private Rigidbody rb;
         private CurrentLevelManager currentLevelManager;
         private bool platformTrigger;
 
-        private GameObject parentPool;
+        private float timer;
 
+        private GameObject parentPool;
+        private Transform firstChildObject;
+        private bool state;
+        private bool stopped;
+
+        private Quaternion targetRotation1 = Quaternion.Euler(-10, 180, 0); 
+        private Quaternion targetRotation2 = Quaternion.Euler(0, 180, 0);
+        private Quaternion targetRotation3 = Quaternion.Euler(10, 180, 0); 
+
+        [SerializeField] private float rotationSpeed = 5f;
+
+       public
+        enum CarState
+        {
+            idle,
+            stopping,
+            moving
+        }
+
+        public CarState carState;
+
+        public void SetCarState(CarState state)
+        {
+            carState = state;
+        }
         private void Awake()
         {
             
             rb = GetComponent<Rigidbody>();
-            parent = GameObject.FindWithTag("Platform");
+            //parent = GameObject.FindWithTag("Platform");
             currentLevelManager = FindObjectOfType<CurrentLevelManager>();
             parentPool = GameObject.FindWithTag("CarPool");
-            
+
+            firstChildObject = gameObject.transform.GetChild(0);
+            Debug.Log(firstChildObject.name);
         }
 
         private void OnEnable()
         {
             transform.localRotation = Quaternion.Euler(0, 180, 0);
             platformTrigger = false;
-            parent = GameObject.FindWithTag("Platform");
+            //parent = GameObject.FindWithTag("Platform");
             currentLevelManager = FindObjectOfType<CurrentLevelManager>();
             rb.isKinematic = false;
         }
 
         void Update()
         {
-            if (GameManager.Instance.click && !platformTrigger)
-            {
-                OnClick();
-            }
           
-            if (UIManager.finished)
-            {
-                transform.SetParent(parentPool.transform);
-                gameObject.SetActive(false);
+            
+           switch (carState)
+           {
+               case CarState.moving: OnMoving();
+                   MovedRotation();
+                   break;
+               case CarState.stopping: OnStopping();
+                   StoppedRotation();
+                   break;
+           }
+           
+           if (UIManager.finished)
+           {
+               transform.SetParent(parentPool.transform);
+               gameObject.SetActive(false);
 
+           }
+        }
+
+        private void OnMoving()
+        {
+            if (!platformTrigger)
+            {
+                transform.position += transform.forward * (carSpeed * Time.deltaTime);
             }
         }
 
-        private void OnClick()
+        private void OnStopping()
         {
-            transform.position += transform.forward * (carSpeed * Time.deltaTime);
+            rb.linearVelocity = Vector3.zero;
+        }
+
+        private void StoppedRotation()
+        {
+            if (stopped)
+            {
+                firstChildObject.rotation = Quaternion.Lerp(firstChildObject.transform.rotation, targetRotation3, Time.deltaTime * rotationSpeed);
+                StartCoroutine(Rotating());
+                stopped = false;
+            }
+        }
+
+        private void MovedRotation()
+        {
+            if (!state)
+            {
+                firstChildObject.rotation = Quaternion.Lerp(firstChildObject.transform.rotation, targetRotation1, Time.deltaTime * rotationSpeed);
+                StartCoroutine(Rotating());
+                state = true;
+            }
+           
+        }
+
+        private IEnumerator Rotating()
+        {
+            yield return new WaitForSeconds(.25f);
+            firstChildObject.rotation = Quaternion.Lerp(firstChildObject.transform.rotation, targetRotation2, Time.deltaTime * (rotationSpeed * 3));
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("PlatformTrigger"))
             {
+                GameManager.Instance.click = false;
+                SetCarState(CarState.stopping);
+                stopped = true;
                 platformTrigger = true;
                 rb.isKinematic = true;
-                gameObject.transform.SetParent(parent.transform, true);
-                rb.linearVelocity = Vector3.zero;
+                //gameObject.transform.SetParent(parent.transform, true);
+                //rb.linearVelocity = Vector3.zero;
                 currentLevelManager.GetCar();
                 currentLevelManager.carCount--;
                 UIManager.Instance.CarCountText(currentLevelManager.carCount);
-                GameManager.Instance.click = false;
                 other.gameObject.GetComponent<BoxCollider>().isTrigger = false;
             }
         }

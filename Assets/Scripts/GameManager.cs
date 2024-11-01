@@ -14,7 +14,7 @@ public class GameManager : GenericSingleton<GameManager>
 
     private void Awake()
     {
-       // Application.targetFrameRate = 60;
+        Application.targetFrameRate = 60;
 
         DontDestroyOnLoad(gameObject);
     }
@@ -22,7 +22,16 @@ public class GameManager : GenericSingleton<GameManager>
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
-            click = true;
+        {
+            foreach (var car in cars)
+            {
+                if (car.activeInHierarchy)
+                {
+                    car.gameObject.GetComponent<CarController>().SetCarState(CarController.CarState.moving);
+                    //break;
+                }
+            }
+        }
     }
 
     public List<GameObject> GetCarPool(int carCount)

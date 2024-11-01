@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Car;
 
 public class CurrentLevelManager : MonoBehaviour
 {
-    [SerializeField] GameObject platform;
+    //[SerializeField] GameObject platform;
     [SerializeField] float rotationSpeed;
     public int carCount;
     private List<GameObject> cars;
@@ -28,15 +29,15 @@ public class CurrentLevelManager : MonoBehaviour
 
     void Update()
     {
-        PlatformRotation();
+        //PlatformRotation();
         if(carCount <= 0)
             UIManager.Instance.FinishPanel();
     }
 
-    private void PlatformRotation()
+    /*private void PlatformRotation()
     {
         platform.transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime), Space.Self);
-    }
+    }*/
 
     public void GetCar()
     {
