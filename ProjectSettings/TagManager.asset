@@ -8,6 +8,8 @@ TagManager:
   - Platform
   - CurrentLevelManager
   - CarPool
+  - Obstacle
+  - Diamond
   layers:
   - Default
   - TransparentFX

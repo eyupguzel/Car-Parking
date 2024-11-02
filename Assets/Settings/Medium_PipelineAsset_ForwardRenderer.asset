@@ -35,7 +35,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_TransparentLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 119
   m_DefaultStencilState:
     overrideStencilState: 0
     stencilReference: 0
@@ -46,8 +46,8 @@ MonoBehaviour:
   m_ShadowTransparentReceive: 0
   m_RenderingMode: 2
   m_DepthPrimingMode: 0
-  m_CopyDepthMode: 1
+  m_CopyDepthMode: 0
   m_DepthAttachmentFormat: 0
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
-  m_IntermediateTextureMode: 1
+  m_IntermediateTextureMode: 0

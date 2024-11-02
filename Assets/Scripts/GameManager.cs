@@ -8,8 +8,7 @@ using UnityEngine;
 public class GameManager : GenericSingleton<GameManager>
 {
     public List<GameObject> cars =  new List<GameObject>();
-
-
+    public static int carCount;
     public bool click;
 
     private void Awake()
@@ -53,14 +52,19 @@ public class GameManager : GenericSingleton<GameManager>
         }
         return carsToUse;
     }
-
+    
     public void ReturnCar(List<GameObject> cars)
     {
-        //Debug.Log("ben çalıştım");
         foreach (GameObject car in cars)
         {
             car.SetActive(false);
         }
+    }
+
+    public void CheckCarCount()
+    {
+        if(carCount <= 0)
+            UIManager.Instance.FinishPanel();
     }
 
     public void ClickFalse()

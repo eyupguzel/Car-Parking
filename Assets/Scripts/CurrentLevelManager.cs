@@ -2,26 +2,24 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Car;
+using Unity.VisualScripting;
 
 public class CurrentLevelManager : MonoBehaviour
 {
-    //[SerializeField] GameObject platform;
-    [SerializeField] float rotationSpeed;
     public int carCount;
-    private List<GameObject> cars;
-    [SerializeField] private Transform spawnPoint;
-
-    private void Awake()
+    public  List<GameObject> cars;
+    public Transform spawnPoint;
+    
+    private  void Awake()
     {
         GameManager.Instance.ClickFalse();
         cars = GameManager.Instance.GetCarPool(carCount);
-        //GameManager.Instance.ReturnCar(cars);
     }
 
     private void Start()
     {
         UIManager.finished = false;
-
+        UpdateCarCaount();
         UIManager.Instance.CarCountText(carCount);
         UIManager.Instance.CloseFinishPanel();
         GetCar();
@@ -29,17 +27,10 @@ public class CurrentLevelManager : MonoBehaviour
 
     void Update()
     {
-        //PlatformRotation();
-        if(carCount <= 0)
-            UIManager.Instance.FinishPanel();
+        
     }
 
-    /*private void PlatformRotation()
-    {
-        platform.transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime), Space.Self);
-    }*/
-
-    public void GetCar()
+    public virtual void GetCar()
     {
         foreach (GameObject car in cars)
         {
@@ -51,6 +42,11 @@ public class CurrentLevelManager : MonoBehaviour
                 return;
             }
         }
+    }
+
+    public void UpdateCarCaount()
+    {
+        GameManager.carCount = carCount;
     }
 
 }
