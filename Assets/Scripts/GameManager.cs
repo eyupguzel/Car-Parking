@@ -7,9 +7,11 @@ using UnityEngine;
 
 public class GameManager : GenericSingleton<GameManager>
 {
-    public List<GameObject> cars =  new List<GameObject>();
+    public Vector3 checkPoint;
+    public List<GameObject> cars = new List<GameObject>();
     public static int carCount;
-    public bool click;
+
+    public int livesLeft = 2;
 
     private void Awake()
     {
@@ -45,14 +47,14 @@ public class GameManager : GenericSingleton<GameManager>
                 carsToUse.Add(car);
                 index++;
 
-                if (index >= carCount) 
+                if (index >= carCount)
                     break;
             }
-            
         }
+
         return carsToUse;
     }
-    
+
     public void ReturnCar(List<GameObject> cars)
     {
         foreach (GameObject car in cars)
@@ -63,12 +65,7 @@ public class GameManager : GenericSingleton<GameManager>
 
     public void CheckCarCount()
     {
-        if(carCount <= 0)
+        if (carCount <= 0)
             UIManager.Instance.FinishPanel();
-    }
-
-    public void ClickFalse()
-    {
-        click = false;
     }
 }

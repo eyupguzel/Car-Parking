@@ -10,6 +10,8 @@ TagManager:
   - CarPool
   - Obstacle
   - Diamond
+  - CheckPoint
+  - Car
   layers:
   - Default
   - TransparentFX

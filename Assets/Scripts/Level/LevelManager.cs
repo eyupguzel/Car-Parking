@@ -19,7 +19,13 @@ public class LevelManager : GenericSingleton<LevelManager>
 
    public void NextLevelButton()
    {
+      UIManager.Instance.finishPanel.SetActive(false);
       SceneManager.LoadScene(1);
-      UIManager.finished = false;
+   }
+
+   public void LoadLevel1()
+   {
+      UIManager.Instance.levelsPanel.SetActive(false);
+      SceneManager.LoadScene(0);
    }
 }

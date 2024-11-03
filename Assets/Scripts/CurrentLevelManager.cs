@@ -7,13 +7,13 @@ using Unity.VisualScripting;
 public class CurrentLevelManager : MonoBehaviour
 {
     public int carCount;
-    public  List<GameObject> cars;
+    public List<GameObject> cars;
     public Transform spawnPoint;
-    
-    private  void Awake()
+
+    private void Awake()
     {
-        GameManager.Instance.ClickFalse();
         cars = GameManager.Instance.GetCarPool(carCount);
+        GetCar();
     }
 
     private void Start()
@@ -22,12 +22,6 @@ public class CurrentLevelManager : MonoBehaviour
         UpdateCarCaount();
         UIManager.Instance.CarCountText(carCount);
         UIManager.Instance.CloseFinishPanel();
-        GetCar();
-    }
-
-    void Update()
-    {
-        
     }
 
     public virtual void GetCar()
@@ -48,5 +42,4 @@ public class CurrentLevelManager : MonoBehaviour
     {
         GameManager.carCount = carCount;
     }
-
 }

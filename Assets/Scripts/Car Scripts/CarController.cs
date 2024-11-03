@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -8,12 +9,14 @@ namespace Car
 {
     public class CarController : MonoBehaviour
     {
-         //private GameObject parent;
+        //private GameObject parent;
         [SerializeField] float carSpeed;
+
         private Rigidbody rb;
+
         //private CurrentLevelManager currentLevelManager;
         private bool platformTrigger;
-
+        
         private float timer;
 
         private GameObject parentPool;
@@ -21,14 +24,16 @@ namespace Car
         private bool state;
         private bool stopped;
 
-        private Quaternion targetRotation1 = Quaternion.Euler(-10, 180, 0); 
+        private Quaternion targetRotation1 = Quaternion.Euler(-10, 180, 0);
         private Quaternion targetRotation2 = Quaternion.Euler(0, 180, 0);
-        private Quaternion targetRotation3 = Quaternion.Euler(10, 180, 0); 
+        private Quaternion targetRotation3 = Quaternion.Euler(10, 180, 0);
+
+        public static bool _checked;
 
         [SerializeField] private float rotationSpeed = 5f;
 
-       public
-        enum CarState
+        public
+            enum CarState
         {
             idle,
             stopping,
@@ -41,14 +46,15 @@ namespace Car
         {
             carState = state;
         }
+
         private void Awake()
         {
-            
             rb = GetComponent<Rigidbody>();
             parentPool = GameObject.FindWithTag("CarPool");
 
             firstChildObject = gameObject.transform.GetChild(0);
             Debug.Log(firstChildObject.name);
+            GameManager.Instance.checkPoint = transform.position;
         }
 
         private void OnEnable()
@@ -62,33 +68,36 @@ namespace Car
 
         void FixedUpdate()
         {
-           switch (carState)
-           {
-               case CarState.moving: OnMoving();
-                   MovedRotation();
-                   break;
-               case CarState.stopping: OnStopping();
-                   StoppedRotation();
-                   break;
-           }
-           
-           if (UIManager.finished)
-           {
-               transform.SetParent(parentPool.transform);
-               gameObject.SetActive(false);
+            switch (carState)
+            {
+                case CarState.moving:
+                    OnMoving();
+                    MovedRotation();
+                    break;
+                case CarState.stopping:
+                    OnStopping();
+                    StoppedRotation();
+                    break;
+            }
 
-           }
+            if (UIManager.finished)
+            {
+                transform.SetParent(parentPool.transform);
+                gameObject.SetActive(false);
+            }
         }
 
-        
-        
+
         private void OnMoving()
         {
             if (!platformTrigger)
             {
-                transform.position += transform.forward * (carSpeed * Time.deltaTime);
-               // StartCoroutine(_Click());
+                //transform.position += transform.forward * (carSpeed * Time.deltaTime);
+                rb.linearVelocity = transform.forward * carSpeed;
+                rb.isKinematic = false;
+                _checked = false;
 
+                //StartCoroutine(_Click());
             }
         }
 
@@ -101,7 +110,8 @@ namespace Car
         {
             if (stopped)
             {
-                firstChildObject.rotation = Quaternion.Lerp(firstChildObject.transform.rotation, targetRotation3, Time.deltaTime * rotationSpeed);
+                firstChildObject.rotation = Quaternion.Lerp(firstChildObject.transform.rotation, targetRotation3,
+                    Time.deltaTime * rotationSpeed);
                 StartCoroutine(Rotating());
                 stopped = false;
             }
@@ -111,17 +121,18 @@ namespace Car
         {
             if (!state)
             {
-                firstChildObject.rotation = Quaternion.Lerp(firstChildObject.transform.rotation, targetRotation1, Time.deltaTime * rotationSpeed);
+                firstChildObject.rotation = Quaternion.Lerp(firstChildObject.transform.rotation, targetRotation1,
+                    Time.deltaTime * rotationSpeed);
                 StartCoroutine(Rotating());
                 state = true;
             }
-           
         }
 
         private IEnumerator Rotating()
         {
             yield return new WaitForSeconds(.25f);
-            firstChildObject.rotation = Quaternion.Lerp(firstChildObject.transform.rotation, targetRotation2, Time.deltaTime * (rotationSpeed * 3));
+            firstChildObject.rotation = Quaternion.Lerp(firstChildObject.transform.rotation, targetRotation2,
+                Time.deltaTime * (rotationSpeed * 3));
         }
 
         private void OnTriggerEnter(Collider other)
@@ -130,17 +141,16 @@ namespace Car
             {
                 platformTrigger = true;
                 other.gameObject.GetComponent<BoxCollider>().isTrigger = false;
-                
+
                 GameManager.carCount--;
                 UIManager.Instance.CarCountText(GameManager.carCount);
-                
+
                 SetCarState(CarState.stopping);
                 stopped = true;
                 rb.isKinematic = true;
-                
+
                 //platformTrigger = false;
                 GameManager.Instance.CheckCarCount();
-
             }
 
             if (other.gameObject.CompareTag("Diamond"))
@@ -151,9 +161,31 @@ namespace Car
 
             if (other.gameObject.CompareTag("Obstacle"))
             {
+                GameManager.Instance.livesLeft--;
+                SetCarState(CarState.stopping);
                 AudioManager.Instance.CrashSound();
-                gameObject.SetActive(false);
-                UIManager.Instance.FinishPanel();
+
+                if (GameManager.Instance.livesLeft > 0)
+                {
+                    transform.position = GameManager.Instance.checkPoint;
+                }
+                else if (GameManager.Instance.livesLeft <= 0)
+                {
+                    gameObject.SetActive(false);
+                    UIManager.Instance.FinishPanel();
+                }
+
+                rb.isKinematic = true;
+            }
+
+            if (other.gameObject.CompareTag("CheckPoint"))
+            {
+                GameManager.Instance.checkPoint = other.gameObject.transform.position;
+                _checked = true;
+                other.gameObject.SetActive(false);
+                //rb.isKinematic = true;
+                SetCarState(CarState.stopping);
+                Debug.Log("1");
             }
         }
     }

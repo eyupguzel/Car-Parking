@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class UIManager : GenericSingleton<UIManager>
 {
+    [SerializeField] private GameObject mainPanel;
+    public GameObject levelsPanel;
+
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -29,5 +32,22 @@ public class UIManager : GenericSingleton<UIManager>
     {
         finishPanel.SetActive(false);
 
+    }
+
+    public void PlayButton()
+    {
+        mainPanel.SetActive(false);
+        levelsPanel.SetActive(true);
+    }
+
+    public void ExitBUtton()
+    {
+        Application.Quit();
+    }
+
+    public void BackToMainMenu()
+    {
+        levelsPanel.SetActive(false);
+        mainPanel.SetActive(true);
     }
 }
