@@ -1,23 +1,16 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Car;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : GenericSingleton<GameManager>
 {
     public Vector3 checkPoint;
     public List<GameObject> cars = new List<GameObject>();
-    public static int carCount;
 
-    public int livesLeft = 2;
-
-    private void Awake()
+    public static int livesLeft;
+    private void Start()
     {
         Application.targetFrameRate = 60;
-
-        DontDestroyOnLoad(gameObject);
     }
 
     void Update()
@@ -55,17 +48,11 @@ public class GameManager : GenericSingleton<GameManager>
         return carsToUse;
     }
 
-    public void ReturnCar(List<GameObject> cars)
+    public void ReturnCar()
     {
         foreach (GameObject car in cars)
         {
             car.SetActive(false);
         }
-    }
-
-    public void CheckCarCount()
-    {
-        if (carCount <= 0)
-            UIManager.Instance.FinishPanel();
     }
 }

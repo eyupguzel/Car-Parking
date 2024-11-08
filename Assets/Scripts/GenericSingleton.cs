@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GenericSingleton<T> : MonoBehaviour where T : GenericSingleton<T>
 {
-    private static T instance = null;
+    private static T instance;
 
     public static T Instance
     {
@@ -19,7 +20,6 @@ public class GenericSingleton<T> : MonoBehaviour where T : GenericSingleton<T>
                     Debug.Log("instance is null");
                 }
             }
-
             return instance;
         }
     }
@@ -28,12 +28,15 @@ public class GenericSingleton<T> : MonoBehaviour where T : GenericSingleton<T>
     {
         if (instance == null)
         {
+            Debug.Log("1");
             instance = this as T;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(instance);
         }
         else if (instance != this)
         {
-            Destroy(gameObject);
+            Debug.Log("2");
+
+            Destroy(instance);
             return;
         }
     }

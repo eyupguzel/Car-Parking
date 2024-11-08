@@ -501,7 +501,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 139950974}
-  - component: {fileID: 139950973}
+  - component: {fileID: 139950975}
   m_Layer: 7
   m_Name: GameObject
   m_TagString: Untagged
@@ -509,28 +509,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!95 &139950973
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 139950972}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4d9957a32978f844a9f76418f66b1d07, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &139950974
 Transform:
   m_ObjectHideFlags: 0
@@ -547,6 +525,19 @@ Transform:
   - {fileID: 1961914139}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &139950975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139950972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c22b226161dda949ae6578cd6a6cc02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1.2
 --- !u!114 &168380992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -725,9 +716,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aa4dc6b44efe8543bd76db28173034d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carCount: 1
   cars: []
   spawnPoint: {fileID: 13254253}
+  livesLeft: 3
 --- !u!4 &477538330
 Transform:
   m_ObjectHideFlags: 0
@@ -2387,9 +2378,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4fc52716fcfa74448859ccf416e1ac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carCount: 1
   cars: []
   spawnPoint: {fileID: 13254253}
+  livesLeft: 0
 --- !u!4 &1350119363
 Transform:
   m_ObjectHideFlags: 0
@@ -2903,7 +2894,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4704890883334246, guid: af6a71ab3a684e949b56f3638651d4d8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.99
+      value: -1.02
       objectReference: {fileID: 0}
     - target: {fileID: 4704890883334246, guid: af6a71ab3a684e949b56f3638651d4d8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3113,41 +3104,12 @@ PrefabInstance:
       propertyPath: m_IncludeLayers.m_Bits
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6922419917112945575, guid: 5266e9ef3be09884385ef06a68bfb213, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1157988874380896, guid: 5266e9ef3be09884385ef06a68bfb213, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1961914138}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5266e9ef3be09884385ef06a68bfb213, type: 3}
---- !u!1 &1961914137 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1157988874380896, guid: 5266e9ef3be09884385ef06a68bfb213, type: 3}
-  m_PrefabInstance: {fileID: 1961914136}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &1961914138
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1961914137}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 72e9777d0dd84614c9806008fb80ab91, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &1961914139 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4089358549002900, guid: 5266e9ef3be09884385ef06a68bfb213, type: 3}

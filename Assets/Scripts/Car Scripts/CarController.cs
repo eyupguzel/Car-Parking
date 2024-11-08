@@ -19,6 +19,7 @@ namespace Car
         
         private float timer;
 
+        public static bool isFinish;
         private GameObject parentPool;
         private Transform firstChildObject;
         private bool state;
@@ -29,7 +30,7 @@ namespace Car
         private Quaternion targetRotation3 = Quaternion.Euler(10, 180, 0);
 
         public static bool _checked;
-
+        public Vector3 startPosition;
         [SerializeField] private float rotationSpeed = 5f;
 
         public
@@ -51,7 +52,6 @@ namespace Car
         {
             rb = GetComponent<Rigidbody>();
             parentPool = GameObject.FindWithTag("CarPool");
-
             firstChildObject = gameObject.transform.GetChild(0);
             Debug.Log(firstChildObject.name);
             GameManager.Instance.checkPoint = transform.position;
@@ -59,6 +59,8 @@ namespace Car
 
         private void OnEnable()
         {
+            startPosition = transform.position;
+            _checked = false;
             transform.localRotation = Quaternion.Euler(0, 180, 0);
             platformTrigger = false;
             //parent = GameObject.FindWithTag("Platform");
@@ -92,12 +94,9 @@ namespace Car
         {
             if (!platformTrigger)
             {
-                //transform.position += transform.forward * (carSpeed * Time.deltaTime);
                 rb.linearVelocity = transform.forward * carSpeed;
                 rb.isKinematic = false;
                 _checked = false;
-
-                //StartCoroutine(_Click());
             }
         }
 
@@ -139,37 +138,36 @@ namespace Car
         {
             if (other.gameObject.CompareTag("PlatformTrigger"))
             {
+                isFinish = true;
                 platformTrigger = true;
+                UIManager.Instance.FinishPanel();
                 other.gameObject.GetComponent<BoxCollider>().isTrigger = false;
-
-                GameManager.carCount--;
-                UIManager.Instance.CarCountText(GameManager.carCount);
-
                 SetCarState(CarState.stopping);
                 stopped = true;
                 rb.isKinematic = true;
-
-                //platformTrigger = false;
-                GameManager.Instance.CheckCarCount();
             }
 
             if (other.gameObject.CompareTag("Diamond"))
             {
                 other.gameObject.SetActive(false);
-                AudioManager.Instance.CollactableDiamondSound();
+                AudioManager.Instance.SoundPlay(AudioManager.AudioType.DiamondSound);
             }
 
             if (other.gameObject.CompareTag("Obstacle"))
             {
-                GameManager.Instance.livesLeft--;
+                GameManager.livesLeft--;
                 SetCarState(CarState.stopping);
-                AudioManager.Instance.CrashSound();
+                AudioManager.Instance.SoundPlay(AudioManager.AudioType.CrashSound);
 
-                if (GameManager.Instance.livesLeft > 0)
+                if (GameManager.livesLeft > 0 && _checked)
                 {
                     transform.position = GameManager.Instance.checkPoint;
                 }
-                else if (GameManager.Instance.livesLeft <= 0)
+                else if (GameManager.livesLeft > 0)
+                {
+                    transform.position = startPosition;
+                } 
+                else if (GameManager.livesLeft <= 0)
                 {
                     gameObject.SetActive(false);
                     UIManager.Instance.FinishPanel();
@@ -185,7 +183,6 @@ namespace Car
                 other.gameObject.SetActive(false);
                 //rb.isKinematic = true;
                 SetCarState(CarState.stopping);
-                Debug.Log("1");
             }
         }
     }

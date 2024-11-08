@@ -6,24 +6,28 @@ using Unity.VisualScripting;
 
 public class CurrentLevelManager : MonoBehaviour
 {
-    public int carCount;
     public List<GameObject> cars;
     public Transform spawnPoint;
+    [SerializeField] private int livesLeft;
 
     private void Awake()
     {
-        cars = GameManager.Instance.GetCarPool(carCount);
+        cars = GameManager.Instance.GetCarPool(1);
         GetCar();
     }
 
     private void Start()
     {
+        UpdateLivesLeft();
+        CarController.isFinish = false;
         UIManager.finished = false;
-        UpdateCarCaount();
-        UIManager.Instance.CarCountText(carCount);
         UIManager.Instance.CloseFinishPanel();
     }
 
+    public void UpdateLivesLeft()
+    {
+        GameManager.livesLeft = livesLeft;
+    }
     public virtual void GetCar()
     {
         foreach (GameObject car in cars)
@@ -36,10 +40,5 @@ public class CurrentLevelManager : MonoBehaviour
                 return;
             }
         }
-    }
-
-    public void UpdateCarCaount()
-    {
-        GameManager.carCount = carCount;
     }
 }

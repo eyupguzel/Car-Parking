@@ -21,7 +21,7 @@ class CarObstacle : BaseObstacle
 
     private void FixedUpdate()
     {
-        if (transform.position.x <= -13)
+        if (transform.position.x <= -18)
         {
             transform.position = startPosition;
         }
@@ -37,7 +37,7 @@ class CarObstacle : BaseObstacle
 
     public override void ObstacleAnimation()
     {
-        transform.position += transform.forward * (3f * Time.deltaTime);
+        transform.position += transform.forward * (6f * Time.deltaTime);
     }
     
 }
