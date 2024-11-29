@@ -716,9 +716,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aa4dc6b44efe8543bd76db28173034d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cars: []
-  spawnPoint: {fileID: 13254253}
+  car: {fileID: 0}
+  spawnPoint: {x: -0.31, y: -0.6, z: -3.77}
   livesLeft: 3
+  spline: {fileID: 0}
 --- !u!4 &477538330
 Transform:
   m_ObjectHideFlags: 0
@@ -1572,6 +1573,118 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!1 &882004692
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 882004694}
+  - component: {fileID: 882004693}
+  m_Layer: 0
+  m_Name: Spline
+  m_TagString: Spline
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &882004693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882004692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab5c7d4c32e743048dfca98e2d5914f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Spline:
+    m_EditModeType: 1
+    m_Knots: []
+    m_MetaData: []
+    m_Closed: 0
+    m_IntData:
+      m_Data: []
+    m_FloatData:
+      m_Data: []
+    m_Float4Data:
+      m_Data: []
+    m_ObjectData:
+      m_Data: []
+  m_Splines:
+  - m_EditModeType: 1
+    m_Knots:
+    - Position:
+        x: 0
+        y: 0
+        z: 0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -0.9766871
+      TangentOut:
+        x: 0
+        y: 0
+        z: 0.9766871
+      Rotation:
+        value:
+          x: -2.5183805e-10
+          y: 0.99994683
+          z: 0.000000024409651
+          w: 0.010316598
+    - Position:
+        x: 0.20151103
+        y: 0.00000047683716
+        z: -9.7647915
+      TangentIn:
+        x: -0
+        y: -0
+        z: -0.9766871
+      TangentOut:
+        x: 0
+        y: 0
+        z: 0.9766871
+      Rotation:
+        value:
+          x: -2.5183805e-10
+          y: 0.99994683
+          z: 0.000000024409651
+          w: 0.010316598
+    m_MetaData:
+    - Mode: 0
+      Tension: 0.5
+    - Mode: 0
+      Tension: 0.5
+    m_Closed: 0
+    m_IntData:
+      m_Data: []
+    m_FloatData:
+      m_Data: []
+    m_Float4Data:
+      m_Data: []
+    m_ObjectData:
+      m_Data: []
+  m_Knots:
+    m_KnotsLink: []
+--- !u!4 &882004694
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882004692}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.3149836, y: -0.61800194, z: -3.8013}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &892939016
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2236,6 +2349,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Dirt_Round_01
       objectReference: {fileID: 0}
+    - target: {fileID: 1181673068495098, guid: cb72242ee217b5b4d993e56d22a7b2bd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4847848513069538, guid: cb72242ee217b5b4d993e56d22a7b2bd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.19
@@ -2378,9 +2495,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4fc52716fcfa74448859ccf416e1ac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cars: []
-  spawnPoint: {fileID: 13254253}
+  car: {fileID: 0}
+  spawnPoint: {x: -0.31, y: -0.6, z: -3.77}
   livesLeft: 0
+  spline: {fileID: 0}
 --- !u!4 &1350119363
 Transform:
   m_ObjectHideFlags: 0
@@ -3167,7 +3285,7 @@ GameObject:
   - component: {fileID: 64166852321888720}
   m_Layer: 6
   m_Name: SM_Env_DirtRoad_Straight_01
-  m_TagString: Untagged
+  m_TagString: Sand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -4693,3 +4811,4 @@ SceneRoots:
   - {fileID: 1350119363}
   - {fileID: 477538330}
   - {fileID: 832985921}
+  - {fileID: 882004694}

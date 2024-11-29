@@ -1,0 +1,5 @@
+C:/Users/eyupg/OneDrive/Belgeler/GitHub/Car-Parking/.utmp/RelWithDebInfo/313d626v/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/eyupg/OneDrive/Belgeler/GitHub/Car-Parking/.utmp/RelWithDebInfo/313d626v/arm64-v8a/CMakeFiles/rebuild_cache.dir
+C:/Users/eyupg/OneDrive/Belgeler/GitHub/Car-Parking/.utmp/RelWithDebInfo/313d626v/arm64-v8a/FramePacing/CMakeFiles/swappywrapper.dir
+C:/Users/eyupg/OneDrive/Belgeler/GitHub/Car-Parking/.utmp/RelWithDebInfo/313d626v/arm64-v8a/FramePacing/CMakeFiles/edit_cache.dir
+C:/Users/eyupg/OneDrive/Belgeler/GitHub/Car-Parking/.utmp/RelWithDebInfo/313d626v/arm64-v8a/FramePacing/CMakeFiles/rebuild_cache.dir

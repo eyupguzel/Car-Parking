@@ -2,15 +2,11 @@ using UnityEngine;
 
 public class Diamond : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public SaveSystem saveSystem;
 
-    // Update is called once per frame
-    void Update()
+    public void AddDiamond(int amount)
     {
-        
+        saveSystem.data.totalDiamonds += amount;
+        saveSystem.SaveData();
     }
 }

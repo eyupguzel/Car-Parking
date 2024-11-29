@@ -1,42 +1,49 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
+using UnityEngine.Splines;
 
 namespace Car
 {
     public class CarController : MonoBehaviour
     {
-        //private GameObject parent;
+        public ParticleSystem[] sandParticles = new ParticleSystem[2];
+        private string ground;
+        private string currentSurface;
+        public CheckPointManager checkPointManager;
+        public CommandManager commandManager;
+
+        public static SplineAnimate spline;
+        private float progress;
         [SerializeField] float carSpeed;
 
         private Rigidbody rb;
 
-        //private CurrentLevelManager currentLevelManager;
-        private bool platformTrigger;
-        
+
         private float timer;
 
-        public static bool isFinish;
         private GameObject parentPool;
         private Transform firstChildObject;
+        
         private bool state;
         private bool stopped;
+        private bool platformTrigger;
 
         private Quaternion targetRotation1 = Quaternion.Euler(-10, 180, 0);
         private Quaternion targetRotation2 = Quaternion.Euler(0, 180, 0);
         private Quaternion targetRotation3 = Quaternion.Euler(10, 180, 0);
 
-        public static bool _checked;
-        public Vector3 startPosition;
+        public  bool _checked;
+        public Vector3 startPosition = new Vector3(-.33f,0.6f,-3.71f);
         [SerializeField] private float rotationSpeed = 5f;
 
-        public
-            enum CarState
+        public static Action collectDiamond;
+        
+
+        public enum CarState
         {
-            idle,
+            empty,
             stopping,
             moving
         }
@@ -47,46 +54,56 @@ namespace Car
         {
             carState = state;
         }
-
         private void Awake()
         {
+            GameManager.Instance.gameStarted += ResetValues;
+            GameManager.Instance.CrashHandler += Crashed;
             rb = GetComponent<Rigidbody>();
             parentPool = GameObject.FindWithTag("CarPool");
             firstChildObject = gameObject.transform.GetChild(0);
-            Debug.Log(firstChildObject.name);
-            GameManager.Instance.checkPoint = transform.position;
+
+            spline = GetComponent<SplineAnimate>();
+        }
+        void OnDisable()
+        {
+            SetCarState(CarState.stopping);
+            transform.position = startPosition;
         }
 
-        private void OnEnable()
+        public void ResetValues()
         {
-            startPosition = transform.position;
-            _checked = false;
             transform.localRotation = Quaternion.Euler(0, 180, 0);
             platformTrigger = false;
-            //parent = GameObject.FindWithTag("Platform");
-            //currentLevelManager = FindObjectOfType<CurrentLevelManager>();
             rb.isKinematic = false;
+            SetCarState(CarState.stopping);
         }
 
-        void FixedUpdate()
+        private void FixedUpdate()
         {
             switch (carState)
             {
                 case CarState.moving:
                     OnMoving();
-                    MovedRotation();
+                    CheckGround();
+                   // MovedRotation();
                     break;
                 case CarState.stopping:
                     OnStopping();
-                    StoppedRotation();
+                    AllParticleSystemStop();
+                    //StoppedRotation();
                     break;
             }
 
-            if (UIManager.finished)
+            if (GameManager.finished)
             {
                 transform.SetParent(parentPool.transform);
                 gameObject.SetActive(false);
             }
+        }
+
+        void Update()
+        {
+            //CheckGround();
         }
 
 
@@ -94,15 +111,13 @@ namespace Car
         {
             if (!platformTrigger)
             {
-                rb.linearVelocity = transform.forward * carSpeed;
-                rb.isKinematic = false;
-                _checked = false;
+                spline.Play();
             }
         }
 
         private void OnStopping()
         {
-            rb.linearVelocity = Vector3.zero;
+            spline.Pause();
         }
 
         private void StoppedRotation()
@@ -110,7 +125,7 @@ namespace Car
             if (stopped)
             {
                 firstChildObject.rotation = Quaternion.Lerp(firstChildObject.transform.rotation, targetRotation3,
-                    Time.deltaTime * rotationSpeed);
+                Time.deltaTime * rotationSpeed);
                 StartCoroutine(Rotating());
                 stopped = false;
             }
@@ -120,7 +135,7 @@ namespace Car
         {
             if (!state)
             {
-                firstChildObject.rotation = Quaternion.Lerp(firstChildObject.transform.rotation, targetRotation1,
+                firstChildObject.rotation = Quaternion.Lerp(firstChildObject.transform.rotation, targetRotation1, 
                     Time.deltaTime * rotationSpeed);
                 StartCoroutine(Rotating());
                 state = true;
@@ -138,52 +153,112 @@ namespace Car
         {
             if (other.gameObject.CompareTag("PlatformTrigger"))
             {
-                isFinish = true;
                 platformTrigger = true;
-                UIManager.Instance.FinishPanel();
                 other.gameObject.GetComponent<BoxCollider>().isTrigger = false;
                 SetCarState(CarState.stopping);
                 stopped = true;
                 rb.isKinematic = true;
+                transform.position = startPosition;
+
+                GameManager.finished = true;
             }
 
             if (other.gameObject.CompareTag("Diamond"))
             {
+                collectDiamond?.Invoke();
                 other.gameObject.SetActive(false);
-                AudioManager.Instance.SoundPlay(AudioManager.AudioType.DiamondSound);
+                SaveSystem.Instance.data.totalDiamonds += 1;
+                SaveSystem.Instance.SaveData();
             }
 
             if (other.gameObject.CompareTag("Obstacle"))
             {
-                GameManager.livesLeft--;
-                SetCarState(CarState.stopping);
-                AudioManager.Instance.SoundPlay(AudioManager.AudioType.CrashSound);
-
-                if (GameManager.livesLeft > 0 && _checked)
-                {
-                    transform.position = GameManager.Instance.checkPoint;
-                }
-                else if (GameManager.livesLeft > 0)
-                {
-                    transform.position = startPosition;
-                } 
-                else if (GameManager.livesLeft <= 0)
-                {
-                    gameObject.SetActive(false);
-                    UIManager.Instance.FinishPanel();
-                }
-
-                rb.isKinematic = true;
+                GameManager.isCrahs = true;
             }
 
             if (other.gameObject.CompareTag("CheckPoint"))
             {
-                GameManager.Instance.checkPoint = other.gameObject.transform.position;
+                progress = spline.NormalizedTime;
+
+                checkPointManager.SetCheckPoint(transform);
                 _checked = true;
+                FallowCamera.cameraStop = true;
                 other.gameObject.SetActive(false);
-                //rb.isKinematic = true;
                 SetCarState(CarState.stopping);
             }
+
         }
+        
+        public void Crashed()
+        {
+            UpdateSplineProgress();
+
+            SetCarState(CarState.stopping);
+            if (GameManager.livesLeft > 0 && _checked)
+            {
+                var resetCommand = new ResetToCheckpointCommand(transform,
+                    checkPointManager.GetCheckPointPosition(),
+                    checkPointManager.GetCheckPointRotation());
+                commandManager.ExecuteCommand(resetCommand);
+            }
+            else if (GameManager.livesLeft > 0 && !_checked)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+            else if (GameManager.livesLeft < 0)
+            {
+                GameManager.finished = true;
+                gameObject.SetActive(false);
+            }
+
+            rb.isKinematic = true;
+        }
+
+        public static void UpdateSpline(SplineContainer _spline)
+        {
+            spline.NormalizedTime = 0f;
+            spline.Container = _spline;
+        }
+
+        private void UpdateSplineProgress()
+        {
+            spline.NormalizedTime = progress;
+        }
+
+        
+        private void CheckGround()
+        {
+            Debug.Log("a");
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.down, out hit))
+            {
+                ground = hit.collider.tag;
+                    currentSurface = ground;
+                    UpdateSurface(currentSurface);
+                
+            }
+        }
+
+        private void UpdateSurface(string surface)
+        {
+            Debug.Log("b");
+
+            switch (surface)
+            {
+                case "Sand": sandParticles[0].Play(); sandParticles[1].Play(); break;
+                case "Asphalt" : break;
+            }
+        }
+
+        private void AllParticleSystemStop()
+        {
+            Debug.Log("c");
+
+            foreach (ParticleSystem sand in sandParticles)
+            {
+                sand.Stop();
+            }
+        }
+        
     }
 }

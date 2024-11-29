@@ -28,7 +28,7 @@ public class GenericSingleton<T> : MonoBehaviour where T : GenericSingleton<T>
     {
         if (instance == null)
         {
-            Debug.Log("1");
+            //Debug.Log("1");
             instance = this as T;
             DontDestroyOnLoad(instance);
         }

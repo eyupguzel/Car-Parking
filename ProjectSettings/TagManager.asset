@@ -12,6 +12,8 @@ TagManager:
   - Diamond
   - CheckPoint
   - Car
+  - Spline
+  - Sand
   layers:
   - Default
   - TransparentFX

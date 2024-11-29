@@ -7,19 +7,18 @@ public class FallowCamera : MonoBehaviour
 {
     private GameObject car;
     private Vector3 offset;
+    public static bool cameraStop;
     
     void Start()
     {
         car = GameObject.FindWithTag("Car");
-
-        Debug.Log(car.name);
-            offset =transform.position - car.transform.position;
+        offset =transform.position - car.transform.position;
     }
 
     
     void Update()
     {
-        if (CarController._checked)
+        if (cameraStop)
         {
             transform.position = Vector3.Lerp(transform.position,car.transform.position + offset,Time.deltaTime * 10f);
             StartCoroutine(checkTimer());
@@ -28,7 +27,7 @@ public class FallowCamera : MonoBehaviour
 
     private IEnumerator checkTimer()
     {
-        yield return new WaitForSeconds(1.5f);
-        CarController._checked = false;
+        yield return new WaitForSeconds(0.5f);
+        cameraStop = false;
     }
 }

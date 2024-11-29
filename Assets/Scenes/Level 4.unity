@@ -264,13 +264,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8decef5a77a322342a5b2c57b357ac1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkPoint: {x: 0, y: 0, z: 0}
-  cars:
-  - {fileID: 650911485}
-  - {fileID: 2022531414}
-  - {fileID: 698036688}
-  - {fileID: 1725080062}
-  - {fileID: 1440774496}
+  car: {fileID: 0}
+  carsSO: []
+  totalDiamonds: 0
 --- !u!4 &37646755
 Transform:
   m_ObjectHideFlags: 0
@@ -3211,7 +3207,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2039df1cdd4f3c468907f3517ab0183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkPointManager: {fileID: 0}
+  commandManager: {fileID: 0}
+  lastCheckpointProgress: 0
   carSpeed: 7
+  _checked: 0
   startPosition: {x: 0, y: 0, z: 0}
   rotationSpeed: 20
   carState: 0
@@ -3250,6 +3250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelButtons: []
+  slider: {fileID: 0}
 --- !u!4 &669535284
 Transform:
   m_ObjectHideFlags: 0
@@ -3602,7 +3603,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2039df1cdd4f3c468907f3517ab0183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkPointManager: {fileID: 0}
+  commandManager: {fileID: 0}
+  lastCheckpointProgress: 0
   carSpeed: 10
+  _checked: 0
   startPosition: {x: 0, y: 0, z: 0}
   rotationSpeed: 0
   carState: 0
@@ -5008,9 +5013,16 @@ MonoBehaviour:
   levelsPanel: {fileID: 0}
   pausePanel: {fileID: 0}
   finishPanel: {fileID: 2037583743}
+  infoPanel: {fileID: 0}
   pauseButton: {fileID: 0}
   NextLevelButton: {fileID: 0}
   RestartButton: {fileID: 0}
+  diamondText: {fileID: 0}
+  health1: {fileID: 0}
+  health2: {fileID: 0}
+  health3: {fileID: 0}
+  activeHealth: {fileID: 0}
+  pasiveHealth: {fileID: 0}
 --- !u!4 &1037723890
 Transform:
   m_ObjectHideFlags: 0
@@ -6644,9 +6656,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4fc52716fcfa74448859ccf416e1ac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cars: []
-  spawnPoint: {fileID: 13254253}
+  car: {fileID: 0}
+  spawnPoint: {x: -0.31, y: -0.6, z: -3.77}
   livesLeft: 3
+  spline: {fileID: 0}
 --- !u!4 &1350119363
 Transform:
   m_ObjectHideFlags: 0
@@ -7304,7 +7317,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2039df1cdd4f3c468907f3517ab0183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkPointManager: {fileID: 0}
+  commandManager: {fileID: 0}
+  lastCheckpointProgress: 0
   carSpeed: 10
+  _checked: 0
   startPosition: {x: 0, y: 0, z: 0}
   rotationSpeed: 0
   carState: 0
@@ -8411,7 +8428,7 @@ MonoBehaviour:
   audioSource: {fileID: 1722826952}
   crashSound: {fileID: 8300000, guid: 137d6e909ba2a544194440f9f5fb99fe, type: 3}
   diamondSound: {fileID: 0}
-  menuClickSound: {fileID: 0}
+  menuClickSound1: {fileID: 0}
   menuClickSound2: {fileID: 0}
   menuClickSound3: {fileID: 0}
 --- !u!4 &1722826954
@@ -8685,7 +8702,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2039df1cdd4f3c468907f3517ab0183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkPointManager: {fileID: 0}
+  commandManager: {fileID: 0}
+  lastCheckpointProgress: 0
   carSpeed: 10
+  _checked: 0
   startPosition: {x: 0, y: 0, z: 0}
   rotationSpeed: 0
   carState: 0
@@ -10179,7 +10200,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2039df1cdd4f3c468907f3517ab0183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkPointManager: {fileID: 0}
+  commandManager: {fileID: 0}
+  lastCheckpointProgress: 0
   carSpeed: 10
+  _checked: 0
   startPosition: {x: 0, y: 0, z: 0}
   rotationSpeed: 0
   carState: 0
